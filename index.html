@@ -6,35 +6,110 @@
 <title>AutoMachina v7.0</title>
 <style>
 body { background:black; color:#00ffcc; font-family:monospace; padding:20px; }
-.card { border:1px solid #00ffcc; padding:10px; margin:10px; display:inline-block; }
-.dashboard h1 { margin-bottom:20px; }
-.features ul { list-style-type:square; padding-left:20px; }
+.dashboard { max-width:700px; margin:auto; }
+.card { border:1px solid #00ffcc; padding:10px; margin:10px 0; border-radius:5px; }
+h1,h2 { text-align:center; }
+ul { list-style:none; padding:0; }
+li { padding:5px 0; }
+button { background:#00ffcc; color:black; border:none; padding:5px 10px; cursor:pointer; margin:5px 0; border-radius:3px; }
+#logs { border:1px solid #00ffcc; padding:10px; height:150px; overflow:auto; background:#001a1a; }
 </style>
 </head>
 <body>
-
+<div class="dashboard">
 <h1>AutoMachina v7.0</h1>
 
-<!-- Dashboard Cards -->
-<div class="card">Earnings: ₹16746</div>
-<div class="card">Tokens: 339</div>
-<div class="card">Status: SECURED</div>
-
-<!-- Features List -->
-<div class="features">
-    <h2>Features</h2>
-    <ul>
-        <li>Device Shield</li>
-        <li>File Guard</li>
-        <li>App Guard</li>
-        <li>Network Guard</li>
-        <li>Cyber Lawyer AI</li>
-        <li>Fraud Detection & Ledger</li>
-        <li>Safe Shutdown</li>
-        <li>Behavior Watch</li>
-        <li>Threat Brain</li>
-    </ul>
+<div class="card">
+<p>Earnings: ₹<span id="earnings">0</span></p>
+<p>Tokens: <span id="tokens">0</span></p>
+<p>Status: <span id="status">SECURED</span></p>
 </div>
 
+<div class="card">
+<h2>Features</h2>
+<ul>
+<li>Device Shield</li>
+<li>File Guard</li>
+<li>App Guard</li>
+<li>Network Guard</li>
+<li>Cyber Lawyer AI</li>
+<li>Fraud Detection & Ledger</li>
+<li>Safe Shutdown</li>
+<li>Behavior Watch</li>
+<li>Threat Brain</li>
+</ul>
+<button onclick="simulateEarnings()">Simulate Earnings</button>
+<button onclick="forcePayout()">Force Payout ₹100</button>
+</div>
+
+<div class="card">
+<h2>Logs</h2>
+<div id="logs"></div>
+</div>
+
+</div>
+
+<script>
+// ====== CORE DATA ======
+let coreStatus = {
+    earnings: 16746,
+    tokens: 339,
+    status: "SECURED",
+    logs: []
+};
+
+// ====== LOG FUNCTION ======
+function logMessage(msg){
+    coreStatus.logs.push(msg);
+    const logsDiv = document.getElementById("logs");
+    logsDiv.innerHTML = coreStatus.logs.map(l=>`> ${l}`).join("<br>");
+    logsDiv.scrollTop = logsDiv.scrollHeight;
+}
+
+// ====== FETCH STATUS ======
+function updateDashboard(){
+    document.getElementById("earnings").innerText = coreStatus.earnings.toFixed(2);
+    document.getElementById("tokens").innerText = coreStatus.tokens;
+    document.getElementById("status").innerText = coreStatus.status;
+}
+
+// ====== SIMULATE EARNINGS ======
+function simulateEarnings(){
+    let earn = Math.floor(Math.random()*500+50);
+    let token = Math.floor(Math.random()*10+1);
+    coreStatus.earnings += earn;
+    coreStatus.tokens += token;
+    updateDashboard();
+    logMessage(`🚀 Simulated: ₹${earn}, Tokens: ${token}`);
+}
+
+// ====== FORCE PAYOUT ======
+function forcePayout(){
+    if(coreStatus.earnings >= 100){
+        coreStatus.earnings -= 100;
+        updateDashboard();
+        logMessage("💸 Forced Payout: ₹100 SUCCESS");
+    } else {
+        logMessage("❌ Payout Failed: Insufficient balance");
+    }
+}
+
+// ====== AUTO CYCLE ======
+function autoCycle(){
+    let earn = Math.floor(Math.random()*200+20);
+    let token = Math.floor(Math.random()*5+1);
+    coreStatus.earnings += earn;
+    coreStatus.tokens += token;
+    updateDashboard();
+    logMessage(`AI Cycle: +₹${earn}, +${token} Tokens`);
+}
+
+// Run every 5 seconds
+setInterval(autoCycle, 5000);
+
+// Initial load
+updateDashboard();
+logMessage("⚡ AutoMachina Core Connected (Simulation Mode)");
+</script>
 </body>
 </html>
