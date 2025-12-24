@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<body style="background:black;color:#00ffcc;font-family:monospace">
+<pre id="code"></pre>
+
+<script>
+let p=new URLSearchParams(location.search);
+fetch(`http://localhost:8080/file?repo=${p.get("repo")}&file=${p.get("file")}`)
+.then(r=>r.text())
+.then(t=>document.getElementById("code").innerText=t);
+</script>
+
+</body>
+</html>

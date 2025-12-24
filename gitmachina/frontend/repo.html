@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Repository</title>
+</head>
+
+<body style="background:#0d1117;color:#c9d1d9;font-family:monospace">
+
+<h2 id="title"></h2>
+
+<!-- ================= BRANCH CONTROLS ================= -->
+<h3>Branches</h3>
+
+<select id="branchSelect"></select>
+<button onclick="switchBranch()">Switch</button>
+
+<br><br>
+
+<input id="newBranch" placeholder="new branch name">
+<button onclick="createBranch()">Create Branch</button>
+
+<hr>
+
+<!-- ================= FILE LIST ================= -->
+<h3>Files</h3>
+<div id="filesDiv"></div>
+
+<hr>
+
+<!-- ================= UPLOAD ================= -->
+<h3>Upload File</h3>
+<input id="fname" placeholder="file name"><br><br>
+<textarea id="fdata" placeholder="code here" rows="10" cols="50"></textarea><br><br>
+<button onclick="upload()">Upload</button>
+
+<hr>
+
+<!-- ================= COMMIT ================= -->
+<h3>Commit Changes</h3>
+<input id="msg" placeholder="commit message">
+<button onclick="makeCommit()">Commit</button>
+
+<p>
+<a id="history" style="color:#58a6ff">View Commit History</a>
+</p>
+
+<!-- ================= SCRIPT ================= -->
+<script>
+/* ---------- GLOBAL ---------- */
+const repo = new URLSearchParams(location.search).get("name");
+document.getElementById("title").innerText = repo;
+document.getElementById("history").href =
+    "commits.html?repo=" + repo;
+
+const filesDiv = document.getElementById("filesDiv");
+const branchSelect = document.getElementById("branchSelect");
+
+/* ---------- LOAD FILES ---------- */
+fetch("http://localhost:8080/repos")
+.then(r => r.json())
+.then(d => {
+    let files = d[repo].files;
+    filesDiv.innerHTML = "";
+    for (let x in files) {
+        filesDiv.innerHTML += `
+        <div>
+            <a href="file.html?repo=${repo}&file=${x}"
+               style="color:#58a6ff">${x}</a>
+        </div>`;
+    }
+});
+
+/* ---------- UPLOAD ---------- */
+function upload(){
+    fetch("http://localhost:8080/upload", {
+        method: "POST",
+        body: new URLSearchParams({
+            repo: repo,
+            filename: fname.value,
+            content: fdata.value
+        })
+    })
+    .then(r => r.text())
+    .then(msg => {
+        alert(msg);
+        location.reload();
+    });
+}
+
+/* ---------- COMMIT ---------- */
+function makeCommit(){
+    fetch("http://localhost:8080/commit", {
+        method: "POST",
+        body: new URLSearchParams({
+            repo: repo,
+            message: msg.value
+        })
+    })
+    .then(r => r.json())
+    .then(d => {
+        alert("Committed: " + d.commit.id);
+        msg.value = "";
+    });
+}
+
+/* ---------- BRANCHES ---------- */
+function loadBranches(){
+ fetch("http://localhost:8080/branch/current?repo="+repo)
+ .then(r=>r.json())
+ .then(d=>{
+   branchSelect.innerHTML="";
+   d.branches.forEach(b=>{
+     let o=document.createElement("option");
+     o.value=b;
+     o.text=b;
+     if(b===d.active) o.selected=true;
+     branchSelect.appendChild(o);
+   });
+ });
+}
+
+function createBranch(){
+ fetch("http://localhost:8080/branch/create",{
+  method:"POST",
+  body:new URLSearchParams({
+   repo:repo,
+   branch:newBranch.value
+  })
+ }).then(r=>r.text())
+   .then(msg=>{
+     alert(msg);
+     newBranch.value="";
+     loadBranches();
+   });
+}
+
+function switchBranch(){
+ fetch("http://localhost:8080/branch/switch",{
+  method:"POST",
+  body:new URLSearchParams({
+   repo:repo,
+   branch:branchSelect.value
+  })
+ }).then(r=>r.text())
+ .then(msg=>{
+  alert(msg);
+  location.reload();
+ });
+}
+
+loadBranches();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>GitMachina</title>
+<style>
+body{background:#0d1117;color:#c9d1d9;font-family:monospace}
+.repo{border:1px solid #30363d;padding:10px;margin:10px}
+a{color:#58a6ff;text-decoration:none}
+</style>
+</head>
+<body>
+
+<h1>GitMachina</h1>
+<p>AutoMachina Code Platform</p>
+
+<div id="repos"></div>
+
+<script>
+fetch("http://localhost:8080/repos")
+.then(r=>r.json())
+.then(d=>{
+ for(let r in d){
+  document.getElementById("repos").innerHTML+=
+  `<div class="repo">
+   <a href="repo.html?name=${r}">${r}</a>
+  </div>`;
+ }
+});
+</script>
+
+</body>
+<h3>Create New Repo</h3>
+<input id="rname" placeholder="repo name">
+<button onclick="createRepo()">Create</button>
+
+<script>
+function createRepo(){
+ fetch("http://localhost:8080/create_repo",{
+  method:"POST",
+  body:new URLSearchParams({name:rname.value})
+ }).then(r=>r.text()).then(alert)
+}
+</script>
+
+</html>

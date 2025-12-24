@@ -1,0 +1,10 @@
+{
+  "automachina": {
+    "owner": "sirohi2535",
+    "files": {
+      "index.html": "<h1>AutoMachina</h1>",
+      "start.sh": "#!/bin/bash\necho AutoMachina",
+      "ai_net_brain.py": "print('AI Active')"
+    }
+  }
+}

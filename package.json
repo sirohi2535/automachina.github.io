@@ -1,0 +1,25 @@
+{
+  "name": "automachina_site",
+  "version": "1.0.0",
+  "description": "",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sirohi2535/automachina.github.io.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/sirohi2535/automachina.github.io/issues"
+  },
+  "homepage": "https://github.com/sirohi2535/automachina.github.io#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Commit History</title>
+</head>
+
+<body style="background:#0d1117;color:#c9d1d9;font-family:monospace">
+
+<h2 id="title"></h2>
+
+<div id="list"></div>
+
+<script>
+const repo = new URLSearchParams(location.search).get("repo");
+document.getElementById("title").innerText =
+    "Commit History — " + repo;
+
+fetch("http://localhost:8080/commits?repo=" + repo)
+.then(r => r.json())
+.then(commits => {
+    commits.reverse().forEach(c => {
+        list.innerHTML += `
+        <div style="border:1px solid #30363d;
+                    padding:10px;
+                    margin:10px">
+            <b>${c.message}</b><br>
+            Commit: ${c.id}<br>
+            Branch: ${c.branch}<br>
+            Time: ${c.time}
+        </div>`;
+    });
+});
+</script>
+
+</body>
+</html>
