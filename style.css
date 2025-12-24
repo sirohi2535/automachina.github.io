@@ -1,0 +1,26 @@
+body {
+    background-color: #000;
+    color: #0f0;
+    font-family: monospace;
+    text-align: center;
+    padding: 20px;
+}
+
+.dashboard h1 {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.info p {
+    font-size: 1.2em;
+}
+
+.features {
+    margin-top: 30px;
+    text-align: left;
+    display: inline-block;
+}
+
+.features ul {
+    list-style-type: square;
+}
